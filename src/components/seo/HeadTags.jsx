@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-export default function HeadTags({ title, description, keywords = [], canonical, jsonLd = [] }) {
+export default function HeadTags({ title, description, keywords={[], canonical, jsonLd = [] }) {
   useEffect(() => {
     if (title) document.title = title
     const ensure = (name, content) => {

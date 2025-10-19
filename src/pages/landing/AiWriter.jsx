@@ -9,7 +9,7 @@ export default function AiWriter() {
   const [region, setRegion] = useState({ code:'US', name:'United States' })
   const json = useMemo(()=>[{'@context':'https://schema.org','@type':'SoftwareApplication',name:'SEOScribe AI Writer',applicationCategory:'BusinessApplication',areaServed:region.name,offers:{'@type':'Offer','price':'24.00','priceCurrency':'USD'}}], [region])
   return (<div className="min-h-screen bg-white">
-    <HeadTags title="AI Writer — Rank-Ready Articles in 60s | SEOScribe" description="AI writer with real-time SERP research. Create SEO-optimized articles, citations, images, and meta tags in under a minute." keywords=["ai writer", "ai article writer", "seo ai writer", "content generator", "writing tool"] canonical={`${window.location.origin}/ai-writer`} jsonLd={json} />
+    <HeadTags title="AI Writer — Rank-Ready Articles in 60s | SEOScribe" description="AI writer with real-time SERP research. Create SEO-optimized articles, citations, images, and meta tags in under a minute." keywords={["ai writer", "ai article writer", "seo ai writer", "content generator", "writing tool"] canonical={`${window.location.origin}/ai-writer`} jsonLd={json} />
     <BackgroundFX /><Navbar />
     <section className="pt-20 pb-8"><div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
