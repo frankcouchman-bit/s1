@@ -9,7 +9,7 @@ export default function WritingTool() {
   const [region, setRegion] = useState({ code:'US', name:'United States' })
   const json = useMemo(()=>[{'@context':'https://schema.org','@type':'SoftwareApplication',name:'SEOScribe Writing Tool',applicationCategory:'BusinessApplication',areaServed:region.name,offers:{'@type':'Offer','price':'24.00','priceCurrency':'USD'}}], [region])
   return (<div className="min-h-screen bg-white">
-    <HeadTags title="Writing Tool — Research, Draft, Optimize | SEOScribe" description="Writing tool with built-in research and SEO optimization. Draft rank-ready articles with FAQs, images, and meta tags. Try the live demo." keywords=["writing tool", "ai writing tool", "seo writing tool", "content tool", "ai writer"] canonical={`${window.location.origin}/writing-tool`} jsonLd={json} />
+    <HeadTags title="Writing Tool — Research, Draft, Optimize | SEOScribe" description="Writing tool with built-in research and SEO optimization. Draft rank-ready articles with FAQs, images, and meta tags. Try the live demo." keywords={["writing tool", "ai writing tool", "seo writing tool", "content tool", "ai writer"] canonical={`${window.location.origin}/writing-tool`} jsonLd={json} />
     <BackgroundFX /><Navbar />
     <section className="pt-20 pb-8"><div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
