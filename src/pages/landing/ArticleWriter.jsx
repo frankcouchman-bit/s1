@@ -1,12 +1,13 @@
 // src/pages/landing/ArticleWriter.jsx
 import React, { useMemo } from "react";
-import HeadTags from "@/components/seo/HeadTags"; // keep this path consistent with your alias config
-import BackgroundFX from "@/components/BackgroundFX"; // your existing component
-import Navbar from "@/components/Navbar"; // your existing component
+import HeadTags from "@/components/seo/HeadTags";
+import BackgroundFX from "@/components/BackgroundFX";
+import Navbar from "@/components/Navbar";
 
 export default function ArticleWriter() {
-  // If your app provides region from context/hook, replace this with that source.
-  const regionName = "Global";
+  // Graceful fallback if your app doesn't inject a region yet
+  const region =
+    (typeof window !== "undefined" && window.__REGION) || { name: "Global" };
 
   // JSON-LD (memoized)
   const json = useMemo(
@@ -16,14 +17,14 @@ export default function ArticleWriter() {
         "@type": "SoftwareApplication",
         name: "SEOScribe Article Writer",
         applicationCategory: "BusinessApplication",
-        areaServed: regionName,
+        areaServed: region?.name || "Global",
         offers: { "@type": "Offer", price: "24.00", priceCurrency: "USD" },
       },
     ],
-    [regionName]
+    [region?.name]
   );
 
-  // SSR/Prerender-safe canonical
+  // SSR/prerender-safe canonical
   const canonicalUrl =
     typeof window !== "undefined"
       ? `${window.location.origin}/article-writer`
@@ -45,11 +46,9 @@ export default function ArticleWriter() {
         jsonLd={json}
       />
 
-      {/* Site chrome */}
       <BackgroundFX />
       <Navbar />
 
-      {/* Page content (keep or replace with your existing sections) */}
       <main>
         <section className="pt-20 pb-8">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -64,7 +63,7 @@ export default function ArticleWriter() {
           </div>
         </section>
 
-        {/* Keep your original sections/components below if you have them */}
+        {/* Keep your existing sections/components below */}
       </main>
     </div>
   );
