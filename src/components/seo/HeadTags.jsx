@@ -1,7 +1,16 @@
 import { useEffect } from 'react'
+
 export default function HeadTags({ title, description, keywords = [], canonical, jsonLd = [] }) {
   useEffect(() => {
     if (title) document.title = title
+
+    // normalize keywords to array
+    const kw = Array.isArray(keywords)
+      ? keywords
+      : (typeof keywords === 'string'
+          ? keywords.split(',').map(s => s.trim()).filter(Boolean)
+          : [])
+
     const ensure = (name, content) => {
       let el = document.querySelector(`meta[name="${name}"]`)
       if (!el) { el = document.createElement('meta'); el.setAttribute('name', name); document.head.appendChild(el) }
@@ -12,18 +21,24 @@ export default function HeadTags({ title, description, keywords = [], canonical,
       if (!el) { el = document.createElement('meta'); el.setAttribute('property', property); document.head.appendChild(el) }
       el.setAttribute('content', content)
     }
+
     if (description) ensure('description', description)
-    if (keywords?.length) ensure('keywords', keywords.join(', '))
+    if (kw.length) ensure('keywords', kw.join(', '))
+
     let link = document.querySelector('link[rel="canonical"]')
     if (!link) { link = document.createElement('link'); link.setAttribute('rel', 'canonical'); document.head.appendChild(link) }
     link.setAttribute('href', canonical || window.location.href)
+
     ensureProp('og:title', title || '')
     ensureProp('og:description', description || '')
     ensureProp('og:type', 'website')
     ensureProp('og:url', canonical || window.location.href)
+
     let twitter = document.querySelector('meta[name="twitter:card"]')
     if (!twitter) { twitter = document.createElement('meta'); twitter.setAttribute('name', 'twitter:card'); document.head.appendChild(twitter) }
     twitter.setAttribute('content', 'summary_large_image')
+
+    // JSON-LD
     document.querySelectorAll('script[data-ht]').forEach(s => s.remove())
     jsonLd.forEach((obj, i) => {
       const s = document.createElement('script')
@@ -33,5 +48,6 @@ export default function HeadTags({ title, description, keywords = [], canonical,
       document.head.appendChild(s)
     })
   }, [title, description, canonical, JSON.stringify(keywords), JSON.stringify(jsonLd)])
+
   return null
 }
