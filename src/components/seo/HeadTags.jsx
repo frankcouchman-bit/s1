@@ -4,29 +4,44 @@ export default function HeadTags({ title, description, keywords = [], canonical,
   useEffect(() => {
     if (title) document.title = title
 
-    // normalize keywords to array
+    // normalize keywords to array or empty
     const kw = Array.isArray(keywords)
       ? keywords
-      : (typeof keywords === 'string'
-          ? keywords.split(',').map(s => s.trim()).filter(Boolean)
-          : [])
+      : typeof keywords === 'string'
+        ? keywords.split(',').map(s => s.trim()).filter(Boolean)
+        : []
 
     const ensure = (name, content) => {
+      if (!content) return
       let el = document.querySelector(`meta[name="${name}"]`)
-      if (!el) { el = document.createElement('meta'); el.setAttribute('name', name); document.head.appendChild(el) }
-      el.setAttribute('content', content)
-    }
-    const ensureProp = (property, content) => {
-      let el = document.querySelector(`meta[property="${property}"]`)
-      if (!el) { el = document.createElement('meta'); el.setAttribute('property', property); document.head.appendChild(el) }
+      if (!el) {
+        el = document.createElement('meta')
+        el.setAttribute('name', name)
+        document.head.appendChild(el)
+      }
       el.setAttribute('content', content)
     }
 
-    if (description) ensure('description', description)
+    const ensureProp = (property, content) => {
+      if (!content) return
+      let el = document.querySelector(`meta[property="${property}"]`)
+      if (!el) {
+        el = document.createElement('meta')
+        el.setAttribute('property', property)
+        document.head.appendChild(el)
+      }
+      el.setAttribute('content', content)
+    }
+
+    ensure('description', description)
     if (kw.length) ensure('keywords', kw.join(', '))
 
     let link = document.querySelector('link[rel="canonical"]')
-    if (!link) { link = document.createElement('link'); link.setAttribute('rel', 'canonical'); document.head.appendChild(link) }
+    if (!link) {
+      link = document.createElement('link')
+      link.setAttribute('rel', 'canonical')
+      document.head.appendChild(link)
+    }
     link.setAttribute('href', canonical || window.location.href)
 
     ensureProp('og:title', title || '')
@@ -35,10 +50,14 @@ export default function HeadTags({ title, description, keywords = [], canonical,
     ensureProp('og:url', canonical || window.location.href)
 
     let twitter = document.querySelector('meta[name="twitter:card"]')
-    if (!twitter) { twitter = document.createElement('meta'); twitter.setAttribute('name', 'twitter:card'); document.head.appendChild(twitter) }
+    if (!twitter) {
+      twitter = document.createElement('meta')
+      twitter.setAttribute('name', 'twitter:card')
+      document.head.appendChild(twitter)
+    }
     twitter.setAttribute('content', 'summary_large_image')
 
-    // JSON-LD
+    // JSON-LD scripts
     document.querySelectorAll('script[data-ht]').forEach(s => s.remove())
     jsonLd.forEach((obj, i) => {
       const s = document.createElement('script')
